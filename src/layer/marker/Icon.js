@@ -67,15 +67,3 @@ L.Icon = L.Class.extend({
 		return el;
 	}
 });
-
-L.Icon.Default = L.Icon.extend({
-	options: {
-		iconUrl: L.ROOT_URL + 'images/marker.png',
-		iconSize: new L.Point(25, 41),
-		iconAnchor: new L.Point(13, 41),
-		popupAnchor: new L.Point(0, -33),
-
-		shadowUrl: L.ROOT_URL + 'images/marker-shadow.png',
-		shadowSize: new L.Point(41, 41)
-	}
-});
