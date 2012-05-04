@@ -80,6 +80,21 @@ a.leaflet-active {
 	}
 
 
+/* CSS Sprite */
+
+.leaflet-control-layers a,
+div.leaflet-marker-shadow.default-marker, div.leaflet-marker-icon.default-marker,
+.leaflet-popup-close-button,
+.leaflet-control-zoom-in, .leaflet-control-zoom-out {
+  background: url(images/leaflet-sprite.png) no-repeat;
+  }
+div.leaflet-marker-shadow.default-marker {
+  background-position: 0 -54px;
+  }
+div.leaflet-marker-icon.default-marker {
+  background-position: 0 -95px;
+  }
+
 /* Leaflet controls */
 
 .leaflet-control {
@@ -135,8 +150,6 @@ a.leaflet-active {
 	background-color: rgba(255, 255, 255, 0.75);
 	}
 .leaflet-control-zoom a, .leaflet-control-layers a {
-	background-position: 50% 50%;
-	background-repeat: no-repeat;
 	display: block;
 	}
 .leaflet-control-zoom a {
@@ -154,13 +167,18 @@ a.leaflet-active {
 	height: 27px;
 	}
 .leaflet-control-zoom-in {
-	background-image: url(images/zoom-in.png);
+  background-position: -4px -4px;
 	margin-bottom: 5px;
 	}
+.leaflet-touch .leaflet-control-zoom-in {
+  background-position: 0 0;
+  }
 .leaflet-control-zoom-out {
-	background-image: url(images/zoom-out.png);
+  background-position: -4px -31px;
 	}
-
+.leaflet-touch .leaflet-control-zoom-out {
+  background-position: 0 -27px;
+  }
 .leaflet-control-layers {
 	box-shadow: 0 1px 7px #999;
 	background: #f8f8f9;
@@ -169,11 +187,12 @@ a.leaflet-active {
 	border-radius: 8px;
 	}
 .leaflet-control-layers a {
-	background-image: url(images/layers.png);
+  background-position: -4px -140px;
 	width: 36px;
 	height: 36px;
 	}
 .leaflet-touch .leaflet-control-layers a {
+  background-position: 0 -136px;
 	width: 44px;
 	height: 44px;
 	}
@@ -362,5 +381,5 @@ a.leaflet-active {
 	font: 12px/1.4 "Helvetica Neue", Arial, Helvetica, sans-serif;
 	}
 .leaflet-popup-close-button {
-	background: white url(images/popup-close.png);
+  background-position: -27px -27px;
 	}
