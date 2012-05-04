@@ -58,7 +58,7 @@ L.Util = {
 	},
 
 	bind: function (fn, obj) { // (Function, Object) -> Function
-		var args = Array.prototype.slice.call(arguments, 2);
+		var args = arguments.length > 2 ? Array.prototype.slice.call(arguments, 2) : null;
 		return function () {
 			return fn.apply(obj, args || arguments);
 		};
@@ -554,6 +554,12 @@ L.DomUtil = {
 					L.DomUtil.getStyle(el, 'position') === 'absolute') {
 				break;
 			}
+			if (L.DomUtil.getStyle(el, 'position') === 'fixed') {
+				top += docBody.scrollTop || 0;
+				left += docBody.scrollLeft || 0;
+				break;
+			}
+
 			el = el.offsetParent;
 		} while (el);
 
@@ -619,7 +625,7 @@ L.DomUtil = {
 
 	setOpacity: function (el, value) {
 		if (L.Browser.ie) {
-			el.style.filter = 'alpha(opacity=' + Math.round(value * 100) + ')';
+		    el.style.filter = value !== 1 ? 'alpha(opacity=' + Math.round(value * 100) + ')' : '';
 		} else {
 			el.style.opacity = value;
 		}
@@ -1272,6 +1278,10 @@ L.Map = L.Class.extend({
 
 	getPanes: function () {
 		return this._panes;
+	},
+	
+	getContainer: function () {
+		return this._container;
 	},
 
 
@@ -2240,15 +2250,42 @@ L.Icon = L.Class.extend({
 	}
 });
 
-L.Icon.Default = L.Icon.extend({
+
+L.DivIcon = L.Icon.extend({
 	options: {
-		iconUrl: L.ROOT_URL + 'images/marker.png',
+		iconSize: new L.Point(12, 12), // also can be set through CSS
+		shadow: false,
+		/*
+		iconAnchor: (Point)
+		popupAnchor: (Point)
+		*/
+		className: 'leaflet-div-icon'
+	},
+
+	createIcon: function () {
+		var div = document.createElement('div');
+		this._setIconStyles(div, 'icon');
+		return div;
+	},
+
+	createShadow: function () {
+		if (!this.options.shadow) {
+			return null;
+		}
+		var div = document.createElement('div');
+		this._setIconStyles(div, 'shadow');
+		return div;
+	}
+});
+
+L.Icon.Default = L.DivIcon.extend({
+	options: {
+		shadow: true,
 		iconSize: new L.Point(25, 41),
 		iconAnchor: new L.Point(13, 41),
 		popupAnchor: new L.Point(0, -33),
-
-		shadowUrl: L.ROOT_URL + 'images/marker-shadow.png',
-		shadowSize: new L.Point(41, 41)
+		shadowSize: new L.Point(41, 41),
+		className: "default-marker"
 	}
 });
 
@@ -2436,28 +2473,6 @@ L.Marker = L.Class.extend({
 
 	_updateOpacity: function (opacity) {
 		L.DomUtil.setOpacity(this._icon, this.options.opacity);
-	}
-});
-
-
-L.DivIcon = L.Icon.extend({
-	options: {
-		iconSize: new L.Point(12, 12), // also can be set through CSS
-		/*
-		iconAnchor: (Point)
-		popupAnchor: (Point)
-		*/
-		className: 'leaflet-div-icon'
-	},
-
-	createIcon: function () {
-		var div = document.createElement('div');
-		this._setIconStyles(div, 'icon');
-		return div;
-	},
-
-	createShadow: function () {
-		return null;
 	}
 });
 
@@ -4020,6 +4035,10 @@ L.Circle = L.Path.extend({
 
 		return new L.LatLngBounds(sw, ne);
 	},
+	
+	getLatLng: function () {
+		return this._latlng;
+	},
 
 	getPathString: function () {
 		var p = this._point,
@@ -4039,6 +4058,10 @@ L.Circle = L.Path.extend({
 			return "AL " + p.x + "," + p.y + " " + r + "," + r + " 0," + (65535 * 360);
 		}
 	},
+	
+	getRadius: function () {
+		return this._mRadius;
+	},
 
 	_getLngRadius: function () {
 		var equatorLength = 40075017,
@@ -4048,6 +4071,9 @@ L.Circle = L.Path.extend({
 	},
 
 	_checkIfEmpty: function () {
+		if (!this._map) {
+			return false;
+		}
 		var vp = this._map._pathViewport,
 			r = this._radius,
 			p = this._point;
@@ -5380,11 +5406,16 @@ L.Control = L.Class.extend({
 	},
 
 	setPosition: function (position) {
+		var map = this._map;
+
+		if (map) {
+			map.removeControl(this);
+		}
+
 		this.options.position = position;
 
-		if (this._map) {
-			this._map.removeControl(this);
-			this._map.addControl(this);
+		if (map) {
+			map.addControl(this);
 		}
 	},
 
