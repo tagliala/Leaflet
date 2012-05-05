@@ -41,7 +41,7 @@ Javascript:
  ```
  // This example uses sizes and anchor points for
  // Nicolas Mollet's map icons collection,
- // tiled horizontally in one css sprite
+ // tiled horizontally in a single css sprite
  var MyIconSprite = L.DivIcon.extend({
    options: {
      iconSize: new L.Point(32,37),
@@ -62,6 +62,27 @@ CSS:
  }
  .mysprite-marker-home {
    background-position: -32px 0;
+ }
+ ```
+
+What about shadows? If yoy need a shadow, add ```shadow: true``` to ```MyIconSprite``` options and another css rule that sets the background of the shadow div.
+
+Example:
+ ```
+ //javascript
+  var MyIconSprite = L.DivIcon.extend({
+    options: {
+      iconSize: new L.Point(32,37),
+      iconAnchor: new L.Point(16,35),
+      shadow: true
+    }
+  });
+  var homeIcon = new MyIconSprite({ className: "mysprite-marker-home" });
+  var museumIcon = new MyIconSprite({ className: "mysprite-marker-museum" });
+
+ //css
+ .leaflet-shadow-pane .mysprite-marker-home, .leaflet-shadow-pane .mysprite-marker-museum {
+   background: url(dist/images/shadow.png) no-repeat;
  }
  ```
 
