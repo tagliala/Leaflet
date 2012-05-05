@@ -32,9 +32,12 @@ To make a custom build of the library with only the things you need, use the bui
 If you add any new files to the Leaflet source, make sure to also add them to `build/deps.js` so that the build system knows about them. Happy coding!
 
 ## About this fork
-This fork provides css icon sprite by default. Loading images will require only one http request of 4kb instead of six http requests of about 11kb.
-The ```DivIcon``` class was extended to support shadows (through the option ```shadow: true```, ```false``` by default).
-Provided a css sprite, in order to instantiate a new set of icons in this way:
+This fork provides css icon sprite by default. Loading images will require only one http request of 4 kb instead of six http requests of about 11 kb.
+The ```DivIcon``` class was extended to support shadows (through the option ```shadow```, ```false``` by default).
+
+Provided a css sprite, in order to instantiate a new set of icons in the following way.
+
+Javascript:
  ```
  // If you need to change image size or add shadow
  // This example uses sizes and anchor points for
@@ -62,7 +65,10 @@ CSS:
    background-position: -32px 0;
  }
  ```
-You can still load single images in the following way:
+
+You can still load single images in the following way.
+
+Javascript:
  ```
  var MyIcon = L.Icon.extend({
    options: {
