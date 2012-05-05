@@ -30,3 +30,53 @@ Now that you have everything installed, run `jake` inside the Leaflet directory.
 To make a custom build of the library with only the things you need, use the build helper (`build/build.html`) to choose the components (it figures out dependencies for you) and then run the command generated with it.
 
 If you add any new files to the Leaflet source, make sure to also add them to `build/deps.js` so that the build system knows about them. Happy coding!
+
+## About this fork
+This fork provides css icon sprite by default. Loading images will require only one http request of 4kb instead of six http requests of about 11kb.
+The ```DivIcon``` class was extended to support shadows (through the option ```shadow: true```, ```false``` by default).
+Provided a css sprite, in order to instantiate a new set of icons in this way:
+ ```
+ // If you need to change image size or add shadow
+ // This example uses sizes and anchor points for
+ // Nicolas Mollet's map icons collection,
+ // tiled horizontally
+ var MyIconSprite = L.DivIcon.extend({
+   options: {
+     iconSize: new L.Point(32,37),
+     iconAnchor: new L.Point(16,35)
+   }
+ });
+ var homeIcon = new MyIconSprite({ className: "mysprite-marker-home" });
+ var museumIcon = new MyIconSprite({ className: "mysprite-marker-museum" });
+ ```
+
+CSS:
+ ```
+ .mysprite-marker-home, .mysprite-marker-museum {
+   background: url(dist/images/my-icon-sprite.png) no-repeat;
+ }
+ .mysprite-marker-museum {
+   background-position: 0 0;
+ }
+ .mysprite-marker-home {
+   background-position: -32px 0;
+ }
+ ```
+You can still load single images in the following way:
+ ```
+ var MyIcon = L.Icon.extend({
+   options: {
+     iconUrl: 'dist/images/my-custom-marker.png',
+     shadowUrl: 'dist/images/my-custom-shadow.png',
+     iconSize: new L.Point(25, 41),
+     iconAnchor: new L.Point(13, 41),
+     popupAnchor: new L.Point(0, -33),
+     shadowSize: new L.Point(41, 41)
+   }
+ });
+ var myIcon = new MyIcon();
+ ```
+
+## IE6 Notes
+As many of you know, Internet Explorer 6 doesn't support alpha transparency. The ```filter``` hack doesn't work for icon sprites, 'cause the browser ignores ```background-position``` property.
+Anyway, it seems to be buggy on the master branch of Leaflet too, so it **works without transparency**.
