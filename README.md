@@ -30,3 +30,79 @@ Now that you have everything installed, run `jake` inside the Leaflet directory.
 To make a custom build of the library with only the things you need, use the build helper (`build/build.html`) to choose the components (it figures out dependencies for you) and then run the command generated with it.
 
 If you add any new files to the Leaflet source, make sure to also add them to `build/deps.js` so that the build system knows about them. Happy coding!
+
+## CSS icon sprite
+This fork provides a css icon sprite by default. Loading images will require only one http request of 4 kb instead of six http requests of about 11 kb.
+The ```DivIcon``` class was extended to support shadows (through the boolean option ```shadow```, set at ```false``` by default).
+
+In order to instantiate a new set of icons with your sprite, you must follow those steps.
+
+Javascript:
+ ```
+ // This example uses sizes and anchor points for
+ // Nicolas Mollet's map icons collection,
+ // tiled horizontally in a single css sprite
+ var MyIconSprite = L.DivIcon.extend({
+   options: {
+     iconSize: new L.Point(32,37),
+     iconAnchor: new L.Point(16,35)
+   }
+ });
+ var homeIcon = new MyIconSprite({ className: "mysprite-marker-home" });
+ var museumIcon = new MyIconSprite({ className: "mysprite-marker-museum" });
+ ```
+
+CSS:
+ ```
+ .mysprite-marker-home, .mysprite-marker-museum {
+   background: url(dist/images/my-icon-sprite.png) no-repeat;
+ }
+ .mysprite-marker-museum {
+   background-position: 0 0;
+ }
+ .mysprite-marker-home {
+   background-position: -32px 0;
+ }
+ ```
+
+What about shadows? If yoy need a shadow, add ```shadow: true``` to ```MyIconSprite``` options and another css rule that sets the background of the shadow div.
+
+Example:
+ ```
+ //javascript
+  var MyIconSprite = L.DivIcon.extend({
+    options: {
+      iconSize: new L.Point(32,37),
+      iconAnchor: new L.Point(16,35),
+      shadow: true
+    }
+  });
+  var homeIcon = new MyIconSprite({ className: "mysprite-marker-home" });
+  var museumIcon = new MyIconSprite({ className: "mysprite-marker-museum" });
+
+ //css
+ .leaflet-shadow-pane .mysprite-marker-home, .leaflet-shadow-pane .mysprite-marker-museum {
+   background: url(dist/images/shadow.png) no-repeat;
+ }
+ ```
+
+You can still load single images in the following way.
+
+Javascript:
+ ```
+ var MyIcon = L.Icon.extend({
+   options: {
+     iconUrl: 'dist/images/my-custom-marker.png',
+     shadowUrl: 'dist/images/my-custom-shadow.png',
+     iconSize: new L.Point(25, 41),
+     iconAnchor: new L.Point(13, 41),
+     popupAnchor: new L.Point(0, -33),
+     shadowSize: new L.Point(41, 41)
+   }
+ });
+ var myIcon = new MyIcon();
+ ```
+
+## IE6 Notes
+As many of you know, Internet Explorer 6 doesn't support alpha transparency. The ```filter``` hack doesn't work for icon sprites, 'cause the browser ignores ```background-position``` property.
+Anyway, it seems to be buggy on the master branch of Leaflet too, so it **works without transparency**.

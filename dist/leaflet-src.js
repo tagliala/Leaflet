@@ -2273,42 +2273,44 @@ L.Icon = L.Class.extend({
 });
 
 
-// TODO move to a separate file
-
-L.Icon.Default = L.Icon.extend({
+L.DivIcon = L.Icon.extend({
 	options: {
-		iconSize: new L.Point(25, 41),
-		iconAnchor: new L.Point(13, 41),
-		popupAnchor: new L.Point(0, -33),
-
-		shadowSize: new L.Point(41, 41)
+		iconSize: new L.Point(12, 12), // also can be set through CSS
+		shadow: false,
+		/*
+		iconAnchor: (Point)
+		popupAnchor: (Point)
+		*/
+		className: 'leaflet-div-icon'
 	},
 
-	_getIconUrl: function (name) {
-		var path = L.Icon.Default.imagePath;
-		if (!path) {
-			throw new Error("Couldn't autodetect L.Icon.Default.imagePath, set it manually.");
-		}
+	createIcon: function () {
+		var div = document.createElement('div');
+		this._setIconStyles(div, 'icon');
+		return div;
+	},
 
-		return path + '/marker-' + name + '.png';
+	createShadow: function () {
+		if (!this.options.shadow) {
+			return null;
+		}
+		var div = document.createElement('div');
+		this._setIconStyles(div, 'shadow');
+		return div;
 	}
 });
 
-L.Icon.Default.imagePath = (function () {
-	var scripts = document.getElementsByTagName('script'),
-	    leafletRe = /\/?leaflet[\-\._]?([\w\-\._]*)\.js\??/;
-
-	var i, len, src, matches;
-
-	for (i = 0, len = scripts.length; i < len; i++) {
-		src = scripts[i].src;
-		matches = src.match(leafletRe);
-
-		if (matches) {
-			return src.split(leafletRe)[0] + '/images';
-		}
+L.Icon.Default = L.DivIcon.extend({
+	options: {
+		shadow: true,
+		iconSize: new L.Point(25, 41),
+		iconAnchor: new L.Point(13, 41),
+		popupAnchor: new L.Point(0, -33),
+		shadowSize: new L.Point(41, 41),
+		className: "default-marker"
 	}
-}());
+});
+
 
 /*
  * L.Marker is used to display clickable/draggable icons on the map.
@@ -2493,28 +2495,6 @@ L.Marker = L.Class.extend({
 
 	_updateOpacity: function (opacity) {
 		L.DomUtil.setOpacity(this._icon, this.options.opacity);
-	}
-});
-
-
-L.DivIcon = L.Icon.extend({
-	options: {
-		iconSize: new L.Point(12, 12), // also can be set through CSS
-		/*
-		iconAnchor: (Point)
-		popupAnchor: (Point)
-		*/
-		className: 'leaflet-div-icon'
-	},
-
-	createIcon: function () {
-		var div = document.createElement('div');
-		this._setIconStyles(div, 'icon');
-		return div;
-	},
-
-	createShadow: function () {
-		return null;
 	}
 });
 

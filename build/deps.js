@@ -51,16 +51,16 @@ var deps = {
 		src: ['layer/ImageOverlay.js'],
 		desc: 'Used to display an image over a particular rectangular area of the map.'
 	},
-
-	Marker: {
-		src: ['layer/marker/Icon.js', 'layer/marker/Marker.js'],
-		desc: 'Markers to put on the map.'
+	
+	Icon: {
+		src: ['layer/marker/Icon.js', 'layer/marker/DivIcon.js'],
+		desc: 'Icons to use with markers and other layers.'
 	},
 
-	DivIcon: {
-		src: ['layer/marker/DivIcon.js'],
-		deps: ['Marker'],
-		desc: 'Lightweight div-based icon for markers.'
+	Marker: {
+		src: ['layer/marker/Marker.js'],
+		deps: ['Icon'],
+		desc: 'Markers to put on the map.'
 	},
 
 	Popup: {
@@ -188,7 +188,7 @@ var deps = {
 
 	PolyEdit: {
 		src: ['layer/vector/Polyline.Edit.js'],
-		deps: ['Polyline', 'DivIcon'],
+		deps: ['Polyline', 'Icon'],
 		desc: 'Polyline and polygon editing.'
 	},
 
