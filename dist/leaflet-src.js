@@ -2499,7 +2499,6 @@ L.Marker = L.Class.extend({
 });
 
 
-
 L.Map.mergeOptions({
 	closePopupOnClick: true
 });
@@ -2508,11 +2507,12 @@ L.Popup = L.Class.extend({
 	includes: L.Mixin.Events,
 
 	options: {
-		minWidth: 50,
-		maxWidth: 300,
+		minWidth: 270,
+		maxWidth: 270,
 		maxHeight: null,
 		autoPan: true,
-		closeButton: true,
+		autoCenter: true,
+		closeButton: false,
 		offset: new L.Point(0, 2),
 		autoPanPadding: new L.Point(5, 5),
 		className: ''
@@ -2600,9 +2600,6 @@ L.Popup = L.Class.extend({
 
 		this._contentNode = L.DomUtil.create('div', prefix + '-content', wrapper);
 		L.DomEvent.addListener(this._contentNode, 'mousewheel', L.DomEvent.stopPropagation);
-
-		this._tipContainer = L.DomUtil.create('div', prefix + '-tip-container', container);
-		this._tip = L.DomUtil.create('div', prefix + '-tip', this._tipContainer);
 	},
 
 	_update: function () {
@@ -2616,7 +2613,12 @@ L.Popup = L.Class.extend({
 
 		this._container.style.visibility = '';
 
-		this._adjustPan();
+		if (this.options.autoCenter) {
+			this._autoCenter();
+		}
+		else if (this.options.autoPan) {
+			this._adjustPan();
+		}
 	},
 
 	_updateContent: function () {
@@ -2641,7 +2643,7 @@ L.Popup = L.Class.extend({
 		width = Math.min(width, this.options.maxWidth);
 		width = Math.max(width, this.options.minWidth);
 
-		container.style.width = (width + 1) + 'px';
+		container.style.width = (width) + 'px';
 		container.style.whiteSpace = '';
 
 		container.style.height = '';
@@ -2663,23 +2665,40 @@ L.Popup = L.Class.extend({
 	_updatePosition: function () {
 		var pos = this._map.latLngToLayerPoint(this._latlng);
 
-		this._containerBottom = -pos.y - this.options.offset.y;
+		this._containerTop = pos.y + 10;
 		this._containerLeft = pos.x - Math.round(this._containerWidth / 2) + this.options.offset.x;
 
-		this._container.style.bottom = this._containerBottom + 'px';
+		this._container.style.top = this._containerTop + 'px';
 		this._container.style.left = this._containerLeft + 'px';
 	},
 
-	_adjustPan: function () {
-		if (!this.options.autoPan) { return; }
+	_autoCenter: function () {
+		var map = this._map,
+			containerHeight = this._container.offsetHeight,
+			containerWidth = this._containerWidth,
+			layerPos = new L.Point(
+				this._containerLeft,
+				this._containerTop),
+			containerPos = map.layerPointToContainerPoint(layerPos),
+			adjustOffset = new L.Point(0, 0),
+			size         = map.getSize();
 
+		adjustOffset.x = containerPos.x - Math.round((size.x - containerWidth) / 2);
+		adjustOffset.y = containerPos.y - Math.round((size.y - containerHeight) / 2);
+
+		if (adjustOffset.x || adjustOffset.y) {
+			map.panBy(adjustOffset);
+		}
+	},
+
+	_adjustPan: function () {
 		var map = this._map,
 			containerHeight = this._container.offsetHeight,
 			containerWidth = this._containerWidth,
 
 			layerPos = new L.Point(
 				this._containerLeft,
-				-containerHeight - this._containerBottom),
+				this._containerTop),
 
 			containerPos = map.layerPointToContainerPoint(layerPos),
 			adjustOffset = new L.Point(0, 0),

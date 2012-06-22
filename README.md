@@ -103,6 +103,10 @@ Javascript:
  var myIcon = new MyIcon();
  ```
 
+## Better popups
+This fork provides also better, more modern popups. The ```Popup``` class was extended with an autoexplicative ```autoCenter``` parameters (enabled by default). The close button was disabled by default
+
+
 ## IE6 Notes
 As many of you know, Internet Explorer 6 doesn't support alpha transparency. The ```filter``` hack doesn't work for icon sprites, 'cause the browser ignores ```background-position``` property.
 Anyway, it seems to be buggy on the master branch of Leaflet too, so it **works without transparency**.

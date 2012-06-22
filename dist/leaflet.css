@@ -306,49 +306,45 @@ div.leaflet-marker-icon.default-marker {
 	text-align: center;
 	}
 .leaflet-popup-content-wrapper {
-	padding: 1px;
 	text-align: left;
 	}
 .leaflet-popup-content {
-	margin: 14px 20px;
-	}
-.leaflet-popup-tip-container {
-	margin: 0 auto;
-	width: 40px;
-	height: 16px;
-	position: relative;
-	overflow: hidden;
-	}
-.leaflet-popup-tip {
-	width: 15px;
-	height: 15px;
-	padding: 1px;
-
-	margin: -8px auto 0;
-
-	-moz-transform: rotate(45deg);
-	-webkit-transform: rotate(45deg);
-	-ms-transform: rotate(45deg);
-	-o-transform: rotate(45deg);
-	transform: rotate(45deg);
+	padding: 5px;
 	}
 .leaflet-popup-close-button {
+	z-index: 7;
 	position: absolute;
-	top: 8px;
-	right: 8px;
-
+	top: 9px;
+	right: 11px;
 	width: 10px;
 	height: 10px;
-
 	overflow: hidden;
 	}
-.leaflet-popup-content p {
-	margin: 18px 0;
+
+
+/* CSS Arrow */
+
+.leaflet-popup-content-wrapper:after, .leaflet-popup-content-wrapper:before {
+	bottom: 100%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.leaflet-popup-content-wrapper:after {
+	border-bottom-color: #ffffff;
+	border-width: 8px;
+	left: 50%;
+	margin-left: -8px;
 	}
-.leaflet-popup-scrolled {
-	overflow: auto;
-	border-bottom: 1px solid #ddd;
-	border-top: 1px solid #ddd;
+.leaflet-popup-content-wrapper:before {
+	border-bottom-color: #8c8c8c;
+	border-width: 9px;
+	left: 50%;
+	margin-left: -9px;
 	}
 
 
@@ -366,20 +362,18 @@ div.leaflet-marker-icon.default-marker {
 	opacity: 0.5;
 	}
 .leaflet-popup-content-wrapper, .leaflet-popup-tip {
+	position: relative;
 	background: white;
-
-	box-shadow: 0 3px 10px #888;
-	-moz-box-shadow: 0 3px 10px #888;
-	 -webkit-box-shadow: 0 3px 14px #999;
+	-moz-box-shadow: 0 2px 5px rgba(0,0,0,.3);
+	-webkit-box-shadow: 0 2px 5px rgba(0,0,0,.3);
+	box-shadow: 0 2px 5px rgba(0,0,0,.3);
 	}
 .leaflet-popup-content-wrapper {
-	-moz-border-radius: 20px;
-	-webkit-border-radius: 20px;
-	border-radius: 20px;
+	border: 1px solid #8c8c8c;
 	}
 .leaflet-popup-content {
 	font: 12px/1.4 "Helvetica Neue", Arial, Helvetica, sans-serif;
 	}
 .leaflet-popup-close-button {
-  background-position: -27px -27px;
+	background-position: -27px -27px;
 	}
