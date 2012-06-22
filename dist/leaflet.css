@@ -330,7 +330,7 @@ div.leaflet-marker-icon.default-marker {
 	z-index: 7;
 	position: absolute;
 	top: 9px;
-	right: 11px;
+	right: 6px;
 	width: 10px;
 	height: 10px;
 	overflow: hidden;
