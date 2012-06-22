@@ -36,6 +36,10 @@ L.Popup = L.Class.extend({
 
 		map.on('viewreset', this._updatePosition, this);
 
+		if (L.Browser.any3d) {
+			map.on('zoomanim', this._zoomAnimation, this);
+		}
+
 		if (map.options.closePopupOnClick) {
 			map.on('preclick', this._close, this);
 		}
@@ -51,7 +55,8 @@ L.Popup = L.Class.extend({
 		L.Util.falseFn(this._container.offsetWidth);
 
 		map.off('viewreset', this._updatePosition, this)
-		   .off('preclick', this._close, this);
+		   .off('preclick', this._close, this)
+		   .off('zoomanim', this._zoomAnimation, this);
 
 		this._container.style.opacity = '0';
 
@@ -84,7 +89,7 @@ L.Popup = L.Class.extend({
 
 	_initLayout: function () {
 		var prefix = 'leaflet-popup',
-			container = this._container = L.DomUtil.create('div', prefix + ' ' + this.options.className),
+			container = this._container = L.DomUtil.create('div', prefix + ' ' + this.options.className + ' leaflet-zoom-animated'),
 			closeButton;
 
 		if (this.options.closeButton) {
@@ -126,7 +131,9 @@ L.Popup = L.Class.extend({
 		if (typeof this._content === 'string') {
 			this._contentNode.innerHTML = this._content;
 		} else {
-			this._contentNode.innerHTML = '';
+			while (this._contentNode.hasChildNodes()) {
+				this._contentNode.removeChild(this._contentNode.firstChild);
+			}
 			this._contentNode.appendChild(this._content);
 		}
 		this.fire('contentupdate');
@@ -159,6 +166,8 @@ L.Popup = L.Class.extend({
 		}
 
 		this._containerWidth = this._container.offsetWidth;
+		this._containerBottom = -this.options.offset.y;
+		this._containerLeft = -Math.round(this._containerWidth / 2) + this.options.offset.x;
 	},
 
 	_updatePosition: function () {
@@ -169,15 +178,22 @@ L.Popup = L.Class.extend({
 
 		this._container.style.top = this._containerTop + 'px';
 		this._container.style.left = this._containerLeft + 'px';
+
+		L.DomUtil.setPosition(this._container, pos);
+	},
+	
+	_zoomAnimation: function (opt) {
+		var pos = this._map._latLngToNewLayerPoint(this._latlng, opt.zoom, opt.center)._round();
+
+		L.DomUtil.setPosition(this._container, pos);
 	},
 
 	_autoCenter: function () {
 		var map = this._map,
 			containerHeight = this._container.offsetHeight,
 			containerWidth = this._containerWidth,
-			layerPos = new L.Point(
-				this._containerLeft,
-				this._containerTop),
+			layerPos = L.DomUtil.getPosition(this._container).add(
+				new L.Point(this._containerLeft, this._containerTop)),
 			containerPos = map.layerPointToContainerPoint(layerPos),
 			adjustOffset = new L.Point(0, 0),
 			size         = map.getSize();
@@ -194,11 +210,8 @@ L.Popup = L.Class.extend({
 		var map = this._map,
 			containerHeight = this._container.offsetHeight,
 			containerWidth = this._containerWidth,
-
-			layerPos = new L.Point(
-				this._containerLeft,
-				this._containerTop),
-
+			layerPos = L.DomUtil.getPosition(this._container).add(
+				new L.Point(this._containerLeft, this._containerTop)),
 			containerPos = map.layerPointToContainerPoint(layerPos),
 			adjustOffset = new L.Point(0, 0),
 			padding      = this.options.autoPanPadding,
