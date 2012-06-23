@@ -107,7 +107,6 @@ Javascript:
 This fork provides also better, more modern popups. The ```Popup``` class was extended with an autoexplicative ```autoCenter``` parameter.
 
 Example:
-
 <img src="http://lh3.googleusercontent.com/IWZy3OSvqcukCeNEXs6i5MVqBXCYX-snvYar7m8aJD_sT0N2LO4_VyVYW08egdbWV81tW-jCxNo" alt="" />
 
 CSS:
