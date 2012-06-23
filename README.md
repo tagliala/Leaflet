@@ -37,71 +37,74 @@ The ```DivIcon``` class was extended to support shadows (through the boolean opt
 
 In order to instantiate a new set of icons with your sprite, you must follow those steps.
 
-Javascript:
- ```
- // This example uses sizes and anchor points for
- // Nicolas Mollet's map icons collection,
- // tiled horizontally in a single css sprite
- var MyIconSprite = L.DivIcon.extend({
-   options: {
-     iconSize: new L.Point(32,37),
-     iconAnchor: new L.Point(16,35)
-   }
- });
- var homeIcon = new MyIconSprite({ className: "mysprite-marker-home" });
- var museumIcon = new MyIconSprite({ className: "mysprite-marker-museum" });
- ```
+JavaScript:
+```js
+// This example uses sizes and anchor points for
+// Nicolas Mollet's map icons collection,
+// tiled horizontally in a single css sprite
+var MyIconSprite = L.DivIcon.extend({
+  options: {
+    iconSize: new L.Point(32,37),
+    iconAnchor: new L.Point(16,35)
+  }
+});
+var homeIcon = new MyIconSprite({ className: "mysprite-marker-home" });
+var museumIcon = new MyIconSprite({ className: "mysprite-marker-museum" });
+```
 
 CSS:
- ```
- .mysprite-marker-home, .mysprite-marker-museum {
-   background: url(dist/images/my-icon-sprite.png) no-repeat;
- }
- .mysprite-marker-museum {
-   background-position: 0 0;
- }
- .mysprite-marker-home {
-   background-position: -32px 0;
- }
- ```
+```css
+.mysprite-marker-home, .mysprite-marker-museum {
+  background: url(dist/images/my-icon-sprite.png) no-repeat;
+}
+.mysprite-marker-museum {
+  background-position: 0 0;
+}
+.mysprite-marker-home {
+  background-position: -32px 0;
+}
+```
 
 What about shadows? If yoy need a shadow, add ```shadow: true``` to ```MyIconSprite``` options and another css rule that sets the background of the shadow div.
 
 Example:
- ```
- //javascript
-  var MyIconSprite = L.DivIcon.extend({
-    options: {
-      iconSize: new L.Point(32,37),
-      iconAnchor: new L.Point(16,35),
-      shadow: true
-    }
-  });
-  var homeIcon = new MyIconSprite({ className: "mysprite-marker-home" });
-  var museumIcon = new MyIconSprite({ className: "mysprite-marker-museum" });
 
- //css
- .leaflet-shadow-pane .mysprite-marker-home, .leaflet-shadow-pane .mysprite-marker-museum {
-   background: url(dist/images/shadow.png) no-repeat;
- }
- ```
+CSS:
+```css
+.leaflet-shadow-pane .mysprite-marker-home, .leaflet-shadow-pane .mysprite-marker-museum {
+  background: url(dist/images/shadow.png) no-repeat;
+}
+```
+
+JavaScript:
+```js
+var MyIconSprite = L.DivIcon.extend({
+  options: {
+    iconSize: new L.Point(32,37),
+    iconAnchor: new L.Point(16,35),
+    shadow: true
+  }
+});
+var homeIcon = new MyIconSprite({ className: "mysprite-marker-home" });
+var museumIcon = new MyIconSprite({ className: "mysprite-marker-museum" });
+```
 
 You can still load single images in the following way.
 
-Javascript:
- ```
- var MyIcon = L.Icon.extend({
-   options: {
-     iconUrl: 'dist/images/my-custom-marker.png',
-     shadowUrl: 'dist/images/my-custom-shadow.png',
-     iconSize: new L.Point(25, 41),
-     iconAnchor: new L.Point(13, 41),
-     popupAnchor: new L.Point(0, -33),
-     shadowSize: new L.Point(41, 41)
-   }
- });
- var myIcon = new MyIcon();
- ```
+JavaScript:
+```js
+var MyIcon = L.Icon.extend({
+  options: {
+    iconUrl: 'dist/images/my-custom-marker.png',
+    shadowUrl: 'dist/images/my-custom-shadow.png',
+    iconSize: new L.Point(25, 41),
+    iconAnchor: new L.Point(13, 41),
+    popupAnchor: new L.Point(0, -33),
+    shadowSize: new L.Point(41, 41)
+  }
+});
+var myIcon = new MyIcon();
+```
 
 ## Better popups
 This fork provides also better, more modern popups. The ```Popup``` class was extended with an autoexplicative ```autoCenter``` parameter.
@@ -111,7 +114,8 @@ Example:
 <img src="http://dl.dropbox.com/u/87268031/leaflet-popup-example.png" alt="" />
 
 CSS:
-```
+```css
+.leaflet-popup-image,
 .leaflet-popup-text {
   display: table-cell;
   }
@@ -147,8 +151,8 @@ CSS:
   }
 ```
 
-Javascript:
-```
+JavaScript:
+```js
 L.Popup.mergeOptions({
   minWidth: 270,
   maxWidth: 270,
