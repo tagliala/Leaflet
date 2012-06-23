@@ -104,7 +104,69 @@ Javascript:
  ```
 
 ## Better popups
-This fork provides also better, more modern popups. The ```Popup``` class was extended with an autoexplicative ```autoCenter``` parameters (enabled by default). The close button was disabled by default
+This fork provides also better, more modern popups. The ```Popup``` class was extended with an autoexplicative ```autoCenter``` parameter.
+
+Example:
+
+<img src="http://lh3.googleusercontent.com/IWZy3OSvqcukCeNEXs6i5MVqBXCYX-snvYar7m8aJD_sT0N2LO4_VyVYW08egdbWV81tW-jCxNo" alt="" />
+
+CSS:
+```
+.leaflet-popup-text {
+  display: table-cell;
+  }
+.leaflet-popup-image {
+  line-height: 1px;
+  padding-right: 10px;
+  }
+.leaflet-popup-text {
+  width: 100%;
+  vertical-align: top;
+  font-size: 11px;
+  }
+.leaflet-popup-p-title {
+  margin: 0 0 2px;
+  border-bottom: 1px solid #ddd;
+  font-weight: bold;
+  line-height: 16px;
+  font-size: 12px;
+  }
+.leaflet-popup-p-content {
+  margin: 0;
+  color: #666;
+  }
+.leaflet-popup-p-details {
+  margin: 0;
+  height: 15px;
+  line-height: 15px;
+  }
+.leaflet-popup-detail {
+  display: inline-block;
+  margin-right: 12px;
+  text-align: center;
+  }
+```
+
+Javascript:
+```
+L.Popup.mergeOptions({
+  minWidth: 270,
+  maxWidth: 270,
+  autoCenter: true,
+  closeButton: false
+});
+var my_popup = '<div class="leaflet-popup-image"><img src="image.jpg"/></div>' +
+               '<div class="leaflet-popup-text">' +
+                 '<p class="leaflet-popup-p-title"><a href="#">ARCHITEKTUR!</a></p>' +
+                 '<p class="leaflet-popup-p-content">MAXXI Museo nazionale delle arti</p>' +
+                 '<p class="leaflet-popup-p-details">' +
+                   '<span class="leaflet-popup-detail"><i class="icon-calendar"></i> 04-07-2012</span>' +
+                   '<span class="leaflet-popup-detail"><i class="icon-time"></i> 20.00 pm</span>' +
+                   '<span class="leaflet-popup-detail"><i class="icon-user"></i> <a href="#">122</a></span>' +
+                 '</p>' +
+               '</div>';
+var my_marker = new L.Marker(new L.LatLng(41.929645, 12.467015), { icon: museumIcon }).bindPopup(my_popup);
+```
 
 
 ## IE6 Notes
